@@ -5,135 +5,25 @@ $(function()
 	var bgArtworkUrl;
 	var albumName = $('#album-name');
 	var trackName = $('#track-name');
-	var albumArt = $('#album-art'), sArea = $('#s-area'), seekBar = $('#seek-bar'), trackTime = $('#track-time'), insTime = $('#ins-time'), sHover = $('#s-hover'), playPauseButton = $("#play-pause-button"),  i = playPauseButton.find('i'), tProgress = $('#current-time'), tTime = $('#track-length'), seekT, seekLoc, seekBarPos, cM, ctMinutes, ctSeconds, curMinutes, curSeconds, durMinutes, durSeconds, playProgress, bTime, nTime = 0, buffInterval = null, tFlag = false;
+	var albumArt = $('#album-art'),
+		sArea = $('#s-area'),
+		seekBar = $('#seek-bar'),
+		trackTime = $('#track-time'),
+		insTime = $('#ins-time'),
+		sHover = $('#s-hover'),
+		playPauseButton = $("#play-pause-button"),
+		i = playPauseButton.find('i'),
+		tProgress = $('#current-time'),
+		tTime = $('#track-length'),
+		seekT, seekLoc, seekBarPos, cM, ctMinutes, ctSeconds, curMinutes, curSeconds, durMinutes, durSeconds, playProgress, bTime, nTime = 0,
+		buffInterval = null, tFlag = false;
+	
 	var playPreviousTrackButton = $('#play-previous'), playNextTrackButton = $('#play-next'), currIndex = -1;
-	/*var albums = ['Thì thôi','Me & You','Electro Boy','Home','Proxy (Original Mix)'];
-	var trackNames = ['Reddy','Alex Skrindo - Me & You','Kaaze - Electro Boy','Jordan Schor - Home','Martin Garrix - Proxy'];
-	var albumArtworks = ['_1','_2','_3','_4','_5'];
-	var trackUrl = [
-		'./Musics/ThiThoi.flac',
-		'https://raw.githubusercontent.com/himalayasingh/music-player-1/master/music/1.mp3',
-		'https://raw.githubusercontent.com/himalayasingh/music-player-1/master/music/3.mp3',
-		'https://raw.githubusercontent.com/himalayasingh/music-player-1/master/music/4.mp3',
-		'https://raw.githubusercontent.com/himalayasingh/music-player-1/master/music/5.mp3'
-	];
 	
-	
-			currAlbum = musics[currIndex].artist;
-            currTrackName = musics[currIndex].name;
-            currArtwork = musics[currIndex].picture;
-
-            audio.src = musics[currIndex].url;
-	*/
-	var musics = [{
-		artist: "Reddy (Hữu Duy)",
-		name: "Thì Thôi",
-		url: "Musics/ThiThoi.flac",
-		picture: "https://raw.githubusercontent.com/himalayasingh/music-player-1/master/img/_1.jpg"
-	}, {
-		artist: "Reddy (Hữu Duy)",
-		name: "Nếu Một Ngày",
-		url: "Musics/NeuMotNgay.mp3",
-		picture: "https://raw.githubusercontent.com/himalayasingh/music-player-1/master/img/_1.jpg"
-	}, {
-		artist: "Reddy (Hữu Duy)",
-		name: "Gửi",
-		url: "Musics/Gui.flac",
-		picture: "https://raw.githubusercontent.com/himalayasingh/music-player-1/master/img/_1.jpg"
-	}, {
-		artist: "Reddy (Hữu Duy)",
-		name: "Vài Giây Nữa Thôi",
-		url: "Musics/VaiGiayNuaThoi.flac",
-		picture: "https://raw.githubusercontent.com/himalayasingh/music-player-1/master/img/_1.jpg"
-	}, {
-		artist: "Đức Phúc",
-		name: "Ánh Nắng Của Anh",
-		url: "Musics/AnhNangCuaAnh.flac",
-		picture: "https://raw.githubusercontent.com/himalayasingh/music-player-1/master/img/_1.jpg"
-	}, {
-		artist: "Đức Phúc",
-		name: "Hết Thương Cạn Nhớ",
-		url: "Musics/HetThuongCanNho.flac",
-		picture: "https://raw.githubusercontent.com/himalayasingh/music-player-1/master/img/_1.jpg"
-	}, {
-		artist: "Đức Phúc",
-		name: "Cũng Đành Thôi",
-		url: "Musics/CungDanhThoi.flac",
-		picture: "https://raw.githubusercontent.com/himalayasingh/music-player-1/master/img/_1.jpg"
-	}, {
-		artist: "Đức Phúc",
-		name: "Ta Còn Yêu Nhau",
-		url: "Musics/TaConYeuNhau.flac",
-		picture: "https://raw.githubusercontent.com/himalayasingh/music-player-1/master/img/_1.jpg"
-	}, {
-		artist: "Erik",
-		name: "Lạc Nhau Có Phải Muôn Đời",
-		url: "Musics/LacNhauCoPhaiMuonDoi.flac",
-		picture: "https://raw.githubusercontent.com/himalayasingh/music-player-1/master/img/_1.jpg"
-	}, {
-		artist: "Hoài Lâm",
-		name: "Phút Ban Đầu",
-		url: "Musics/PhutBanDau.mp3",
-		picture: "https://raw.githubusercontent.com/himalayasingh/music-player-1/master/img/_1.jpg"
-	}, {
-		artist: "Bùi Anh Tuấn",
-		name: "Hẹn Một Mai",
-		url: "Musics/HenMotMai.flac",
-		picture: "https://raw.githubusercontent.com/himalayasingh/music-player-1/master/img/_1.jpg"
-	}, {
-		artist: "Chillies",
-		name: "Và Thế Là Hết",
-		url: "Musics/VaTheLaHet.flac",
-		picture: "https://raw.githubusercontent.com/himalayasingh/music-player-1/master/img/_1.jpg"
-	}, {
+	var songs = [{
 		artist: "Dig Didzay",
 		name: "Nếu Anh Đi (Cover)",
 		url: "Musics/NeuAnhDi.mp3",
-		picture: "https://raw.githubusercontent.com/himalayasingh/music-player-1/master/img/_1.jpg"
-	}, {
-		artist: "Noo Phước Thịnh",
-		name: "Chạm Khẽ Tim Anh Một Chút Thôi",
-		url: "Musics/ChamKheTimAnhMotChutThoi.mp3",
-		picture: "https://raw.githubusercontent.com/himalayasingh/music-player-1/master/img/_1.jpg"
-	}, {
-		artist: "Noo Phước Thịnh",
-		name: "Thương Em Là Điều Anh Không Thể Ngờ",
-		url: "Musics/ThuongEmLaDieuAnhKhongTheNgo.mp3",
-		picture: "https://raw.githubusercontent.com/himalayasingh/music-player-1/master/img/_1.jpg"
-	}, {
-		artist: "Thái Đinh",
-		name: "Đi Qua Mùa Hạ",
-		url: "Musics/DiQuaMuaHa.mp3",
-		picture: "https://raw.githubusercontent.com/himalayasingh/music-player-1/master/img/_1.jpg"
-	}, {
-		artist: "Thái Đinh",
-		name: "Phố Không Em",
-		url: "Musics/PhoKhongEm.mp3",
-		picture: "https://raw.githubusercontent.com/himalayasingh/music-player-1/master/img/_1.jpg"
-	}, {
-		artist: "Thái Đinh",
-		name: "Em Có Còn Dùng Số Này Không?",
-		url: "Musics/EmCoConDungSoNayKhong.mp3",
-		picture: "https://raw.githubusercontent.com/himalayasingh/music-player-1/master/img/_1.jpg"
-	}, {
-		artist: "Trung Quân Idol",
-		name: "Chưa Bao Giờ",
-		url: "Musics/ChuaBaoGio.flac",
-		picture: "https://raw.githubusercontent.com/himalayasingh/music-player-1/master/img/_1.jpg"
-	}, {
-		artist: "Trung Quân Idol",
-		name: "Chiều Nay Không Có Mưa Bay",
-		url: "Musics/ChieuNayKhongCoMuaBay.mp3",
-		picture: "https://raw.githubusercontent.com/himalayasingh/music-player-1/master/img/_1.jpg"
-	}, {
-		artist: "Long Phạm",
-		name: "Gió Vẫn Hát",
-		url: "Musics/GioVanHat.mp3",
-		picture: "https://raw.githubusercontent.com/himalayasingh/music-player-1/master/img/_1.jpg"
-	}, {
-		artist: "Vũ",
-		name: "Lạ Lùng",
-		url: "Musics/ChuaBaoGio.flac",
 		picture: "https://raw.githubusercontent.com/himalayasingh/music-player-1/master/img/_1.jpg"
 	}];
 	
@@ -301,7 +191,7 @@ $(function()
         else
             --currIndex;
 
-        if( (currIndex > -1) && (currIndex < musics.length) )
+        if( (currIndex > -1) && (currIndex < songs.length) )
         {
             if( flag == 0 )
                 i.attr('class','fa fa-play');
@@ -315,17 +205,12 @@ $(function()
             trackTime.removeClass('active');
             tProgress.text('00:00');
             tTime.text('00:00');
+			
+			currAlbum = songs[currIndex].name;
+            currTrackName = songs[currIndex].artist;
+            currArtwork = songs[currIndex].picture;
 
-            /*currAlbum = albums[currIndex];
-            currTrackName = trackNames[currIndex];
-            currArtwork = albumArtworks[currIndex];
-
-            audio.src = trackUrl[currIndex];*/
-			currAlbum = musics[currIndex].name;
-            currTrackName = musics[currIndex].artist;
-            currArtwork = musics[currIndex].picture;
-
-            audio.src = musics[currIndex].url;
+            audio.src = songs[currIndex].url;
             
             nTime = 0;
             bTime = new Date();
