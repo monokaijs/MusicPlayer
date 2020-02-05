@@ -37,7 +37,7 @@ $(function()
 		}
 		return a;
 	}
-	musics = shuffle(musics);
+	songs = shuffle(songs);
 
     function playPause()
     {
